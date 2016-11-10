@@ -1,0 +1,100 @@
+<html>
+<head>
+  <title>FakeStocks</title>
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/fakestocks.css">
+</head>
+
+<body>
+
+<script src="./js/jquery-3.1.0.min.js"></script>
+<script src="./js/gistfile1.js"></script>
+<script src="./js/scripts.js"></script>
+<script src="./js/knockout-3.4.0.js"></script>
+<script src="./js/fakeStocksViewModel.js"></script>
+
+<div id="HUD" class="jumbotron row">
+  <div id="accountinfo" class="col-xs-6">
+    <h2>
+      <strong>Your portfolio value: <span data-bind="text: toUSCurrency(user().totalValue())"/></strong>
+      (<span data-bind="text: toUSCurrency(user().availableFunds())"></span> Available)
+      <span data-bind="visible: parseFloat(user().earnings()) > 0">+</span>
+      <span data-bind="text: toUSCurrency(user().earnings()), visible: user().earnings() != 0"/>
+    </h2>
+    Day:<span data-bind="text: day"></span><br/>
+    <!--Time of day display stuff-->
+    <button typeof="button" class="btn btn-default"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 0"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 1"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 2"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 3"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 4"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 5"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 6"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 7"/>
+    <button typeof="button" class="btn btn-default" data-bind="visible: dayIncrement() > 8"/>
+  </div>
+  <div id="marketcol" class="col-xs-6">
+    <div id="marketBubble" class="panel pull-right">
+      <table class="table">
+        <thead><th>market</th><th>vol</th><th>up</th></thead>
+        <tbody data-bind="foreach: markets()">
+          <td data-bind="text: name"/>
+          <td data-bind="text: volatility()"/>
+          <td data-bind="text: marketUpside()"/>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="notices" class="panel panel-default">
+  <marquee id="noticeMarquee" scrollamount="1" direction="right">
+    <span id="notice-text">Begin</span>
+  </marquee>
+</div>
+<script>
+  $("#noticeMarquee").marquee("notice-alert")
+  console.log("Marquee started")
+</script>
+<div id="portfolio" data-bind="visible: user().assetsDisplay().length > 0">
+  <h1>Assets</h1>
+  <table class="table table-striped">
+    <thead><th>Symbol</th><th>Price</th><th>Qty</th><th>Market</th><th>+/-</th><th><!--Empty space for buy sell--></thead>
+    <tbody data-bind="foreach: user().assetsDisplay()">
+      <tr>
+        <td data-bind="text: stock.symbol"/>
+        <td><input data-bind="value: stock.price"/></td>
+        <td data-bind="text: qty"/>
+        <td><span data-bind="text: stock.market.name"/></td>
+        <td><span data-bind="visible: parseFloat(earnings) > 0">+</span>&nbsp;<span data-bind="text: toUSCurrency(earnings)"/></td>
+        <td>
+          <button typeof="button" class="btn btn-success" data-bind="click: $root.user().PurchaseStock, visible: parseFloat($root.user().availableFunds()) >= parseFloat(stock.price())">BUY</button>&nbsp;
+          <button typeof="button" class="btn btn-danger" data-bind="click: $root.user().SellStock">SELL</button>
+        </td>
+    </tbody>
+  </table>
+</div>
+
+<div id="tickers">
+  <h1>Stocks</h1>
+  <table class="table table-striped">
+    <thead><th>Symbol</th><th>Price</th><th>Market</th><th><!--Empty space for buy--></th></thead>
+    <tbody data-bind="foreach: stocksDisplay">
+      <tr>
+        <td data-bind="text: symbol"/>
+        <td><input data-bind="value: price"/></td>
+        <td><span data-bind="text: market.name"/></td>
+        <td><button typeof="button" class="btn btn-success" data-bind="click: $root.user().PurchaseStock">BUY</button></td>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</body>
+</html>
+
+<script>
+  ko.applyBindings(new fakeStocksViewModel())
+</script>

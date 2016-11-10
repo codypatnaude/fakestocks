@@ -1,0 +1,21 @@
+<html>
+<head>
+  <title>Knockout Testing</title>
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+
+<body>
+  <p><span data-bind="text: firstName"/></p>
+  <p><span data-bind="text: lastName"/></p>
+  <p>Obj: <span data-bind="text: nameObj().firstName"/></p>
+  <script src="./js/jquery-3.1.0.min.js"></script>
+  <script src="./js/knockout-3.4.0.js"></script>
+  <script src="./viewModel.js"></script>
+</body>
+</html>
+
+<script>
+
+
+  ko.applyBindings(new viewModel())
+</script>
